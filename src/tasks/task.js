@@ -40,7 +40,7 @@ module.exports = () => {
     });
 
     app.get("/projects", (req, res) => {
-        var query = "select name from projects";
+        var query = "select * from projects";
         DBConnection.executeQueryAndSendResponse(res, query);
 
     });
@@ -82,7 +82,6 @@ module.exports = () => {
     });
 
     app.post("/createTask", (req, res) => {
-
         let refNum="select lpad(max(tasksSeries)+1, 4, '0') as ref from (SELECT s.tasksSeries from series s where orgID="+req.body.orgID+" UNION SELECT '0000' as tasksSeries UNION  SELECT max(t.referenceNum) as  tasksSeries from tasks t WHERE orgID="+req.body.orgID+") s";
         let refText="SELECT s.tasksPrefix from series s where orgID="+req.body.orgID+" UNION SELECT 'TASK-' as tasksPrefix LIMIT 1"
         var query = "INSERT INTO `tasks` (`orgID`,`referenceNum`,`refText`, `endDate`, `category`, `title`, `subject`, `project`, `assignee`, `assignDate`, `assignTime`, `priority`, `notes`)" +
